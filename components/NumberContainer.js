@@ -4,9 +4,9 @@ import { View, StyleSheet, Text } from 'react-native';
 import colors from '../constants/colors';
 import DefaultStyles from '../constants/default-styles';
 
-const NumberContainer = ({ number }) => {
+const NumberContainer = ({ number, style }) => {
   return (
-    <View style={styles.numberContainer}><Text style={DefaultStyles.bodyText}>{number}</Text></View>
+    <View style={{ ...styles.numberContainer, ...style }}><Text style={DefaultStyles.bodyText}>{number}</Text></View>
   );
 };
 

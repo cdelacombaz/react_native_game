@@ -12,6 +12,7 @@ const App = () => {
   const [currentScreen, setCurrentScreen] = useState('start')
   const [secretNumber, setSecretNumber] = useState(null);
   const [guessCount, setGuessCount] = useState(0);
+  const [guesses, setGuesses] = useState([])
   const [result, setResult] = useState('');
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -21,8 +22,9 @@ const App = () => {
     setGuessCount(0)
   };
 
-  const gameOverHandler = (guessesCount, status) => {
+  const gameOverHandler = (guessesCount, guesses, status) => {
     setGuessCount(guessesCount);
+    setGuesses(guesses)
     setCurrentScreen('gameOver')
     setResult(status)
   };
@@ -37,7 +39,7 @@ const App = () => {
   const content =
     currentScreen === 'start' ? <StartGameScreen startGameHandler={startGameHandler} />
       : currentScreen === 'playing' ? <GameScreen secretNumber={secretNumber} gameOverHandler={gameOverHandler} />
-        : currentScreen === 'gameOver' ? <GameOverScreen secretNumber={secretNumber} guessCount={guessCount} result={result} restartGameHandler={restartGameHandler} />
+        : currentScreen === 'gameOver' ? <GameOverScreen secretNumber={secretNumber} guessCount={guessCount} guesses={guesses} result={result} restartGameHandler={restartGameHandler} />
           : null
 
   if (!dataLoaded) {
@@ -62,6 +64,7 @@ const App = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    alignItems: 'center'
   }
 });
 

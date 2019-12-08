@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Alert } from 'react-native';
 // Some icon sets are built in into Expo
 import { FontAwesome } from '@expo/vector-icons'
@@ -19,20 +19,27 @@ const GameScreen = ({ secretNumber, gameOverHandler }) => {
   const currentMin = useRef(1);
   const currentMax = useRef(99);
 
-  const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(currentMin.current, currentMax.current));
+  const initialGuess = generateRandomBetween(currentMin.current, currentMax.current)
+  const [currentGuess, setCurrentGuess] = useState(initialGuess)
+  const [guesses, setGuesses] = useState([initialGuess]);
   const [guessCount, setGuessCount] = useState(1);
+
+  newGuess = () => {
+    const nextNumber = generateRandomBetween(currentMin.current, currentMax.current)
+    setCurrentGuess(nextNumber);
+    setGuesses(pastGuesses => [nextNumber, ...pastGuesses]);
+    setGuessCount(pastCount => pastCount += 1)
+  };
 
   nextGuessHandler = (hint) => {
     if (hint === 'lower' && currentGuess > secretNumber) {
       currentMax.current = currentGuess - 1;
-      setCurrentGuess(generateRandomBetween(currentMin.current, currentMax.current));
-      setGuessCount(guessCount + 1);
+      newGuess();
       return;
     };
     if (hint === 'higher' && currentGuess < secretNumber) {
       currentMin.current = currentGuess + 1;
-      setCurrentGuess(generateRandomBetween(currentMin.current, currentMax.current));
-      setGuessCount(guessCount + 1);
+      newGuess();
       return;
     };
     Alert.alert('That is cheating!', 'Give the computer the correct hint...', [{ text: 'OK', style: 'cancel' }])
@@ -43,14 +50,14 @@ const GameScreen = ({ secretNumber, gameOverHandler }) => {
   // the code will only run if the dependencies changed
   useEffect(() => {
     if (currentGuess === secretNumber) {
-      gameOverHandler(guessCount, 'won');
+      gameOverHandler(guessCount, guesses, 'won');
       return;
     };
     if (guessCount === 5 && currentGuess !== secretNumber) {
-      gameOverHandler(guessCount, 'lost');
+      gameOverHandler(guessCount, guesses, 'lost');
       return;
     };
-  }, [currentGuess, secretNumber]);
+  }, [currentGuess, secretNumber, guessCount]);
 
   return (
     <View style={DefaultStyles.mainContainer}>
@@ -62,8 +69,19 @@ const GameScreen = ({ secretNumber, gameOverHandler }) => {
           <View style={DefaultStyles.button}><CustomButton onPress={() => nextGuessHandler('higher')} ><FontAwesome name='arrow-up' size={18} /></CustomButton></View>
         </View>
       </Card>
+      <ScrollView>
+        {guesses.map(guess => {
+          return <NumberContainer number={guess} key={guess} style={styles.listItem} />
+        })}
+      </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  listItem: {
+    marginTop: 25
+  }
+});
 
 export default GameScreen;

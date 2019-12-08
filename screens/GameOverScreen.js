@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 
 import Card from '../components/Card';
 import NumberContainer from '../components/NumberContainer';
 import CustomButton from '../components/CustomButton';
 import DefaultStyles from '../constants/default-styles';
 
-const GameOverScreen = ({ guessCount, result, secretNumber, restartGameHandler }) => {
+const GameOverScreen = ({ guessCount, guesses, result, secretNumber, restartGameHandler }) => {
   return (
-    <View style={DefaultStyles.mainContainer}>
+    <ScrollView contentContainerStyle={styles.listContainer}>
       <Text style={DefaultStyles.title}>{result === 'won' ? 'WIN!' : 'GAME OVER!'}</Text>
       <View style={styles.imageContainer}>
         {result === 'won'
@@ -22,11 +22,24 @@ const GameOverScreen = ({ guessCount, result, secretNumber, restartGameHandler }
         <NumberContainer number={secretNumber} />
         <View style={DefaultStyles.button}><CustomButton onPress={restartGameHandler} >REPLAY</CustomButton></View>
       </Card>
-    </View>
+      <View style={styles.guessesContainer}>
+        {guesses.reverse().map(guess => {
+          return <NumberContainer number={guess} key={guess} style={guess === secretNumber ? styles.correctNumber : styles.wrongNumber} />
+        })}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  // Didn't take the DefaultStyle.mainContainer on purpose. If we put flex: 1 to Scrollview, the scrolling doesn't work on Android.
+  // The parent View has to have flex: 1 though
+  listContainer: {
+    padding: 15,
+    alignItems: 'center',
+    width: '100%',
+    flexGrow: 1
+  },
   imageContainer: {
     width: 200,
     height: 200,
@@ -39,6 +52,17 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%'
+  },
+  wrongNumber: {
+    marginHorizontal: 10,
+    borderColor: 'red'
+  },
+  correctNumber: {
+    marginHorizontal: 10,
+  },
+  guessesContainer: {
+    flexDirection: 'row',
+    marginTop: 25,
   }
 });
 
