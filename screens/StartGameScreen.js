@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Button, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
 // Keyboard is not a component, but an API to interact with the keyboard. Alert is also an API
 import { Keyboard, Alert } from 'react-native';
 
 import Card from '../components/Card';
 import Confirmation from '../components/StartGameConfirmation';
 import Input from '../components/Input';
-import colors from '../constants/colors';
+import CustomButton from '../components/CustomButton';
 import DefaultStyles from '../constants/default-styles';
 
 const StartGameScreen = props => {
@@ -54,8 +54,8 @@ const StartGameScreen = props => {
             value={numberInput}
           />
           <View style={DefaultStyles.buttonContainer}>
-            <View style={DefaultStyles.button}><Button title='RESET' color={colors.primary} onPress={resetInputHandler} /></View>
-            <View style={DefaultStyles.button}><Button title='CONFIRM' color={colors.primaryLight} onPress={confirmInputHandler} /></View>
+            <View style={DefaultStyles.button}><CustomButton onPress={resetInputHandler} >RESET</CustomButton></View>
+            <View style={DefaultStyles.button}><CustomButton onPress={confirmInputHandler} >CONFIRM</CustomButton></View>
           </View>
         </Card>
         {confirmed ?

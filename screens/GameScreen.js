@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import { Alert } from 'react-native';
+// Some icon sets are built in into Expo
+import { FontAwesome } from '@expo/vector-icons'
 
 import Card from '../components/Card';
 import NumberContainer from '../components/NumberContainer';
+import CustomButton from '../components/CustomButton';
 import { generateRandomBetween } from '../helpers';
-import colors from '../constants/colors';
 import DefaultStyles from '../constants/default-styles';
 
 const GameScreen = ({ secretNumber, gameOverHandler }) => {
@@ -44,7 +46,7 @@ const GameScreen = ({ secretNumber, gameOverHandler }) => {
       gameOverHandler(guessCount, 'won');
       return;
     };
-    if (guessCount === 7 && currentGuess !== secretNumber) {
+    if (guessCount === 5 && currentGuess !== secretNumber) {
       gameOverHandler(guessCount, 'lost');
       return;
     };
@@ -56,8 +58,8 @@ const GameScreen = ({ secretNumber, gameOverHandler }) => {
       <Card style={DefaultStyles.cardContainer}>
         <NumberContainer number={currentGuess} />
         <View style={DefaultStyles.buttonContainer}>
-          <View style={DefaultStyles.button}><Button color={colors.primary} title='LOWER' onPress={() => nextGuessHandler('lower')} /></View>
-          <View style={DefaultStyles.button}><Button color={colors.primaryLight} title='HIGHER' onPress={() => nextGuessHandler('higher')} /></View>
+          <View style={DefaultStyles.button}><CustomButton onPress={() => nextGuessHandler('lower')} ><FontAwesome name='arrow-down' size={18} /></CustomButton></View>
+          <View style={DefaultStyles.button}><CustomButton onPress={() => nextGuessHandler('higher')} ><FontAwesome name='arrow-up' size={18} /></CustomButton></View>
         </View>
       </Card>
     </View>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import Card from './Card';
 import NumberContainer from './NumberContainer';
+import CustomButton from './CustomButton';
 import colors from '../constants/colors';
 import DefaultStyles from '../constants/default-styles';
 
@@ -11,7 +12,7 @@ const Confirmation = props => {
     <Card style={{ ...DefaultStyles.cardContainer, ...styles.cardContainer, ...props.style }}>
       <Text style={DefaultStyles.bodyText}>{props.text}</Text>
       <NumberContainer number={props.number} />
-      <View style={DefaultStyles.button}><Button title='START' color={colors.primary} onPress={props.onPressHandler} /></View>
+      <View style={DefaultStyles.button}><CustomButton onPress={props.onPressHandler} >START</CustomButton></View>
     </Card >
   );
 };
